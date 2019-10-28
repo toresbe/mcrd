@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+mcrd
+
+# vim swap files
+*.sw?
