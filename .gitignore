@@ -34,3 +34,6 @@ mcrd
 
 # vim swap files
 *.sw?
+
+# configuration files
+*.json

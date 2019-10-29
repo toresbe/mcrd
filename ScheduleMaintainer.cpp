@@ -5,7 +5,7 @@
 TimedCommandList HTTPScheduleFetcher::fetch() {
     BOOST_LOG_TRIVIAL(info) << "Fetching schedule";
     last_refreshed = std::chrono::system_clock::now();
-    expiry = last_refreshed + ttl;
+    expiry = last_refreshed + this->ttl;
     TimedCommandList foo;
     return foo;
 }

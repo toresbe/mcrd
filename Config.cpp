@@ -4,6 +4,7 @@
 #include <fstream>
 /// ConfigDevices
 void ConfigDevices::mount(int index, std::shared_ptr<ControllableDevice> device) {
+    // TODO: Change this into assert and move exception into config loader
     if(device_map.count(index)) {
         throw std::runtime_error("Duplicate device ID in config file");
     }

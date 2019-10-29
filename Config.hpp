@@ -30,6 +30,7 @@ class Config {
 using json = nlohmann::json;
 
 class ConfigReaderJSON {
-    static Config load(const std::string &filespec);
+    public:
+        static Config load(const std::string &filespec);
 };
 #endif
