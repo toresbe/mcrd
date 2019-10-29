@@ -5,7 +5,8 @@
  /// Schedule ///
 ////////////////
 
-void Schedule::update_back_buffer(std::queue<ScheduleEntry> &new_queue) {
+// TODO: Be more precise about this method's signature
+void Schedule::update_back_buffer(std::queue<ScheduleEntry> new_queue) {
     BOOST_LOG_TRIVIAL(trace) << "Wrote new schedule to back buffer";
     std::lock_guard<std::mutex> lock(buffer_flip_mutex);
     auto back_queue = (queue == &queue_buffer1) ? &queue_buffer1 : &queue_buffer2;
@@ -20,12 +21,6 @@ void Schedule::flip_buffers() {
     waiting_for_flip = false;
 }
 
-// Takes a list from the ScheduleFetcher of ScheduleEntry classes,
-// clears future events from the command_queue.
-void Schedule::update() {
-    //new_list = fetcher.fetch();
-}
-
 ScheduleEntry Schedule::pop() {
     if(waiting_for_flip) flip_buffers();
     std::lock_guard<std::mutex> lock(buffer_flip_mutex);
@@ -34,9 +29,14 @@ ScheduleEntry Schedule::pop() {
     return next_command;
 }
 
-Schedule::Schedule() : queue() {
-    //BOOST_LOG_TRIVIAL(info) << "Initializing schedule from URI " << uri;
-    //    refresh()
+void Schedule::set_fetcher(HTTPScheduleFetcher* fetcher) {
+    this->fetcher = fetcher;
+    BOOST_LOG_TRIVIAL(info) << "Assigning HTTP fetcher";
+}
+
+void Schedule::refresh() {
+    auto foo = this->fetcher->fetch();
+    update_back_buffer(foo);
 }
 
    ////////////////////

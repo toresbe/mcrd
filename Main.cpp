@@ -16,7 +16,7 @@ int main(int argc, char * argv[]) {
          "config", 
          po::value<std::string>()->default_value("/etc/mcrd.cfg"), 
          "configuration file"
-         );
+        );
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
@@ -25,17 +25,14 @@ int main(int argc, char * argv[]) {
         return 1;
     }
 
+    auto filespec = vm["config"].as<std::string>();
 
-	auto filespec = vm["config"].as<std::string>();
-
-	try {
-		auto cfg = ConfigReaderJSON::load(filespec);
-	}
-	catch (std::exception & e) {
-		BOOST_LOG_TRIVIAL(error) << "Failed to load configuration file \"" << filespec << "\"";
-		BOOST_LOG_TRIVIAL(error) << e.what();
-		exit(1);
-	}
-
-
+    try {
+        auto cfg = ConfigReaderJSON::load(filespec);
+    }
+    catch (std::exception & e) {
+        BOOST_LOG_TRIVIAL(error) << "Failed to load configuration file \"" << filespec << "\"";
+        BOOST_LOG_TRIVIAL(error) << e.what();
+        exit(1);
+    }
 }

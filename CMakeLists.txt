@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 project(mcrd)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(FOO_USE_EXTERNAL_JSON)
   find_package(nlohmann_json 3.2.0 REQUIRED)
 else()
@@ -9,21 +10,18 @@ else()
   add_subdirectory(nlohmann)
 endif()
 
-# Boost
+# Boost & Curl
 
 if(WIN32)
+  find_package(CURL CONFIG REQUIRED)
   set(Boost_USE_STATIC_LIBS ON)
   CMAKE_POLICY(SET CMP0074 NEW)
   find_package(Boost 1.71.0 COMPONENTS program_options log REQUIRED)
 else()
+  find_package(CURL REQUIRED)
   find_package(Boost COMPONENTS program_options log REQUIRED)
   add_definitions(-DBOOST_LOG_DYN_LINK)
 endif()
-
-# curl
-
-find_package(Curl CONFIG REQUIRED)
-
 
 set(PROGNAME mcrd)
 set(THREADS_PREFER_PTHREAD_FLAG ON)

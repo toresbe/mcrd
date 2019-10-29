@@ -5,7 +5,7 @@
 /// ScheduleMaintainer
 
 ScheduleMaintainer::ScheduleMaintainer(std::shared_ptr<Config> config) {
-	this->config = config;
+    this->config = config;
     thread = std::thread(std::bind(&ScheduleMaintainer::event_loop, this));
 }
 
@@ -16,13 +16,6 @@ ScheduleMaintainer::~ScheduleMaintainer() {
     thread.join();
 }
 
-void Schedule::set_fetcher(HTTPScheduleFetcher* fetcher)
-{
-}
-
-void Schedule::refresh()
-{
-}
 
 std::chrono::system_clock::time_point Schedule::get_expiry() {
     // FIXME: Bogus function

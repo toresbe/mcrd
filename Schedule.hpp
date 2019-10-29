@@ -24,43 +24,42 @@ class Schedule {
         std::queue<ScheduleEntry> queue_buffer2;
 
         void flip_buffers();
-        void update_back_buffer(std::queue<ScheduleEntry> &new_queue);
+        void update_back_buffer(std::queue<ScheduleEntry> new_queue);
 
-		HTTPScheduleFetcher* fetcher;
+        HTTPScheduleFetcher* fetcher;
     public:
-		void set_fetcher(HTTPScheduleFetcher* fetcher);
-		void refresh();
+        void set_fetcher(HTTPScheduleFetcher* fetcher);
+        // Gets a new queue of items via the HTTP fetcher and writes 
+        // them to the back buffer
+        void refresh();
 
         std::chrono::system_clock::time_point get_expiry();
-        // Takes a list from the ScheduleFetcher of ScheduleEntry classes,
-        // clears future events from the command_queue.
-        void update();
 
         // If a new buffer is waiting, pop() will swap it in.
         // Returns the newest command from the queue, deleting it.
         ScheduleEntry pop();
 
-        Schedule();
+//        Schedule();
 };
 
 // Note to self: Schedule data format needs to be JSON, what was I smoking...
 // This code is trash
 class ScheduleEntry {
-public:
-	std::string what;
-	std::shared_ptr<ControllableDevice> who;
-	std::chrono::system_clock::time_point when;
-	ScheduleEntry(std::string event_data);
-	ScheduleEntry();
-	void issue();
+    public:
+        std::string what;
+        std::shared_ptr<ControllableDevice> who;
+        std::chrono::system_clock::time_point when;
+        ScheduleEntry(std::string event_data);
+        ScheduleEntry();
+        void issue();
 };
 
 
 class ScheduleEntryList {
     private:
-    static std::forward_list<std::string> split_tokens(std::string incoming_schedule);
+        static std::forward_list<std::string> split_tokens(std::string incoming_schedule);
     public:
-    static std::forward_list<ScheduleEntry> Parse(std::string received_data);
+        static std::forward_list<ScheduleEntry> Parse(std::string received_data);
 };
 
 #endif

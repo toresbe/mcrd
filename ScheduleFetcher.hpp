@@ -1,6 +1,7 @@
 #pragma once
 #ifndef __SCHEDULEFETCHER_HPP
 #define __SCHEDULEFETCHER_HPP
+class HTTPScheduleFetcher;
 #include "Schedule.hpp"
 #include "HTTPGetter.hpp"
 #include <queue>
