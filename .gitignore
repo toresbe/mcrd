@@ -37,3 +37,6 @@ mcrd
 
 # configuration files
 *.json
+/.vs
+/CMakeFiles
+/out/build/x64-Debug
