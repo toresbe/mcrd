@@ -1,4 +1,5 @@
 #include "Config.hpp"
+#include "ScheduleMaintainer.hpp"
 #include <map>
 #include <memory>
 #include <fstream>
@@ -19,8 +20,9 @@ std::shared_ptr<ControllableDevice> ConfigDevices::get (int device_idx) {
 
 /// ConfigReaderJson
 
-Config ConfigReaderJSON::load(const std::string &filespec) {
-    Config config;
+std::shared_ptr<Config> ConfigReaderJSON::load(const std::string &filespec) {
+	BOOST_LOG_TRIVIAL(info) << "Creating configuration from \"" << filespec << "\"...";
+    auto config = std::make_shared<Config>();
 
 	std::ifstream ifs;
 	ifs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -31,27 +33,23 @@ Config ConfigReaderJSON::load(const std::string &filespec) {
 		throw std::runtime_error("Unable to open \"" + filespec + "\"!");
 	}
 
-	json cfg = json::parse(ifs);
+	json cfg = json::parse(ifs);	
 	
-    auto schedule = std::make_shared<Schedule>(cfg["schedule_uri"]);
+	auto schedule_uri = cfg["schedule_uri"].get<std::string>();
+	auto fetcher = new HTTPScheduleFetcher(schedule_uri);
+	config->schedule.set_fetcher(fetcher);
 
     for(auto devicespec: cfg["devices"]) {
         auto type = devicespec["type"];
-        if (devicespec["type"] == "AMCP") {
+        if (devicespec["type"].get<std::string>() == "AMCP") {
             auto device = std::make_shared<AMCPDevice>(devicespec["hostname"], devicespec["port"]);
-            config.devices.mount(devicespec["device_id"], device);
-        } else if (devicespec["type"] == "ATEM") {
+            config->devices.mount(devicespec["device_id"], device);
+        } else if (devicespec["type"].get<std::string>() == "ATEM") {
             auto device = std::make_shared<ATEMDevice>(devicespec["hostname"], devicespec["port"]);
-            config.devices.mount(devicespec["device_id"], device);
+            config->devices.mount(devicespec["device_id"], device);
         } else {
             BOOST_LOG_TRIVIAL(error) << "Device must be ATEM or AMCP!";
         }
     }
     return config;
-}
-
-std::shared_ptr<Schedule> Config::get_schedule() {
-    BOOST_LOG_TRIVIAL(error) << "Dummy get_schedule function invoked";
-    auto foo = std::make_shared<Schedule>("");
-    return foo;
 }
