@@ -21,9 +21,18 @@ std::shared_ptr<ControllableDevice> ConfigDevices::get (int device_idx) {
 
 Config ConfigReaderJSON::load(const std::string &filespec) {
     Config config;
-    std::ifstream ifs(filespec);
-    json cfg = json::parse(ifs);
 
+	std::ifstream ifs;
+	ifs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	try {
+		ifs.open(filespec);
+	} catch (std::system_error & e) {
+		BOOST_LOG_TRIVIAL(error) << e.code().message() << std::endl;
+		throw std::runtime_error("Unable to open \"" + filespec + "\"!");
+	}
+
+	json cfg = json::parse(ifs);
+	
     auto schedule = std::make_shared<Schedule>(cfg["schedule_uri"]);
 
     for(auto devicespec: cfg["devices"]) {

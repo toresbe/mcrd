@@ -27,6 +27,12 @@ int main(int argc, char * argv[]) {
     BOOST_LOG_NAMED_SCOPE("named_scope_logging");
 
     BOOST_LOG_TRIVIAL(info) << "Loading configuration from \"" << filespec << "\"...";
-    // try-catch block here
-    Config cfg = ConfigReaderJSON::load(filespec);
+	try {
+		Config cfg = ConfigReaderJSON::load(filespec);
+	}
+	catch (std::exception & e) {
+		BOOST_LOG_TRIVIAL(error) << "Failed to load configuration file \"" << filespec << "\"";
+		BOOST_LOG_TRIVIAL(error) << e.what();
+		exit(1);
+	}
 }
