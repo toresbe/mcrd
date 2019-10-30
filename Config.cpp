@@ -4,24 +4,6 @@
 #include <memory>
 #include <fstream>
 
-   /////////////////////
-  /// ConfigDevices ///
- /////////////////////
-
-void ConfigDevices::mount(int index, std::shared_ptr<ControllableDevice> device) {
-    // TODO: Change this into assert and move exception into config loader
-    if(device_map.count(index)) {
-        throw std::runtime_error("Duplicate device ID in config file");
-    }
-    BOOST_LOG_TRIVIAL(info) << "Mounting device " << device << " as #" << index;
-    device_map[index] = device;
-}
-
-// Raises exception if invalid device requested. 
-std::shared_ptr<ControllableDevice> ConfigDevices::get (int device_idx) {
-    return device_map.at(device_idx);
-}
-
 /// ConfigReaderJson
 
 std::shared_ptr<Config> ConfigReaderJSON::load(const std::string &filespec) {
@@ -47,11 +29,14 @@ std::shared_ptr<Config> ConfigReaderJSON::load(const std::string &filespec) {
         if (devicespec["type"].get<std::string>() == "AMCP") {
             auto device = std::make_shared<AMCPDevice>(devicespec["hostname"], devicespec["port"]);
             config->devices.mount(devicespec["device_id"], device);
+        } else if (devicespec["type"].get<std::string>() == "Dummy") {
+            auto device = std::make_shared<ATEMDevice>(devicespec["hostname"], devicespec["port"]);
+            config->devices.mount(devicespec["device_id"], device);
         } else if (devicespec["type"].get<std::string>() == "ATEM") {
             auto device = std::make_shared<ATEMDevice>(devicespec["hostname"], devicespec["port"]);
             config->devices.mount(devicespec["device_id"], device);
         } else {
-            BOOST_LOG_TRIVIAL(error) << "Device must be ATEM or AMCP!";
+            BOOST_LOG_TRIVIAL(error) << "Device must be ATEM, Dummy or AMCP!";
         }
     }
     return config;

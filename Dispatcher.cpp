@@ -6,14 +6,11 @@
 
 Dispatcher::Dispatcher(std::shared_ptr <Config> config) {
     this->config = config;
-}
-
-void Dispatcher::start() {
-    BOOST_LOG_TRIVIAL(info) << "Starting Dispatcher";
+    is_running = true;
     thread = std::thread(std::bind(&Dispatcher::event_loop, this));
 }
 
-void Dispatcher::stop() {
+Dispatcher::~Dispatcher() {
     BOOST_LOG_TRIVIAL(info) << "Shutting down Dispatcher";
     is_running = false;
     std::unique_lock<std::mutex> lock(thread_running_lock);
@@ -21,9 +18,13 @@ void Dispatcher::stop() {
     thread.join();
 }
 
+#include <boost/log/attributes/scoped_attribute.hpp>
+
 void Dispatcher::event_loop() {
     BOOST_LOG_TRIVIAL(info) << "Dispatcher event loop running";
     while (is_running) {
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(2s);
         ScheduleEntry command = config->schedule.pop();
         fire_when_ready(command);
     }

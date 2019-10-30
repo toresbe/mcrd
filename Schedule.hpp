@@ -3,7 +3,7 @@
 #define __SCHEDULE_HPP
 
 #include "ScheduleEntry.hpp"
-#include <queue>
+#include <deque>
 #include <string>
 #include <mutex>
 #include <forward_list>
@@ -13,18 +13,22 @@
 // Synchronized data structure used by the Dispatcher and the ScheduleMaintainer
 class Schedule {
     private:
-        std::queue<ScheduleEntry> *queue;
+        std::deque<ScheduleEntry> *queue = &queue_buffer1;
         bool waiting_for_flip = false;
         std::mutex buffer_flip_mutex;
 
-        std::queue<ScheduleEntry> queue_buffer1;
-        std::queue<ScheduleEntry> queue_buffer2;
+	std::chrono::seconds ttl{ 10 };
+	std::chrono::system_clock::time_point last_refreshed;
+	std::chrono::system_clock::time_point expiry;
+
+        std::deque<ScheduleEntry> queue_buffer1;
+        std::deque<ScheduleEntry> queue_buffer2;
 
         void flip_buffers();
-        void update_back_buffer(std::queue<ScheduleEntry> new_queue);
+        void update_back_buffer(std::deque<ScheduleEntry> new_queue);
 
     public:
-        void refresh(std::queue<ScheduleEntry> & new_queue);
+        void refresh(std::deque<ScheduleEntry> & new_queue);
 
         std::chrono::system_clock::time_point get_expiry();
 

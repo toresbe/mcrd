@@ -1,7 +1,9 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include <boost/log/trivial.hpp>
 
+// TODO: Figure out how time zones enter into this nonsense
 namespace DateString {
     using time_point = std::chrono::system_clock::time_point;
     std::string to_string( const time_point& time, const std::string& format)
@@ -27,6 +29,6 @@ namespace DateString {
     }
 
     std::chrono::system_clock::time_point from_iso(std::string datestr) {
-        return from_string(datestr, "%FT%TZ");
+        return from_string(datestr, "%Y-%m-%dT%TZ");
     }
 }

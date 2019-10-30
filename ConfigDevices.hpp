@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include "ControllableDevice.hpp"
 
 class ConfigDevices {

@@ -1,35 +1,40 @@
 #include "Schedule.hpp"
 #include <sstream>
-
-  ////////////////
- /// Schedule ///
-////////////////
+#include <chrono>
 
 // TODO: Be more precise about this method's signature
-void Schedule::update_back_buffer(std::queue<ScheduleEntry> new_queue) {
+void Schedule::update_back_buffer(std::deque<ScheduleEntry> new_queue) {
+    flip_buffers();
     BOOST_LOG_TRIVIAL(trace) << "Wrote new schedule to back buffer";
     std::lock_guard<std::mutex> lock(buffer_flip_mutex);
     auto back_queue = (queue == &queue_buffer1) ? &queue_buffer1 : &queue_buffer2;
-    back_queue->swap(new_queue);
-    waiting_for_flip = true;
+    auto first_relevant_cmd = new_queue.begin();
+    // skip past elements
+    while(first_relevant_cmd->when <= std::chrono::system_clock::now()) first_relevant_cmd++;
+    back_queue->assign(first_relevant_cmd, new_queue.end());
 }
 
 void Schedule::flip_buffers() {
     BOOST_LOG_TRIVIAL(trace) << "Flipping front and back buffers";
     std::lock_guard<std::mutex> lock(buffer_flip_mutex);
     queue = (queue == &queue_buffer1) ? &queue_buffer2 : &queue_buffer1;
-    waiting_for_flip = false;
 }
 
+//TODO: This needs to handle an empty queue more gracefully
 ScheduleEntry Schedule::pop() {
-    if(waiting_for_flip) flip_buffers();
     std::lock_guard<std::mutex> lock(buffer_flip_mutex);
     auto next_command = queue->front(); 
-    queue->pop();
+    queue->pop_front();
     return next_command;
 }
 
+std::chrono::system_clock::time_point Schedule::get_expiry() {
+    return expiry;
+}
+
 // Todo: replace even this function
-void Schedule::refresh(std::queue<ScheduleEntry> & new_queue) {
+void Schedule::refresh(std::deque<ScheduleEntry> & new_queue) {
     update_back_buffer(new_queue);
+    last_refreshed = std::chrono::system_clock::now();
+    expiry = last_refreshed + this->ttl;
 }

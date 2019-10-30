@@ -11,14 +11,15 @@
 class ScheduleMaintainer {
 private:
 	std::shared_ptr<Config> config;
-	std::thread thread;
 	std::condition_variable thread_running;
 	std::mutex thread_running_lock;
 	bool is_running = true;
 
 	void event_loop();
 
+        void refresh();
 public:
+	std::thread thread;
 	ScheduleMaintainer(std::shared_ptr<Config> config);
 	~ScheduleMaintainer();
 };
