@@ -1,5 +1,6 @@
 #ifndef __CONFIG_HPP
 #define __CONFIG_HPP
+
 class Config;
 
 #include <map>
@@ -7,10 +8,13 @@ class Config;
 #include <string>
 #include "Schedule.hpp"
 #include "ConfigDevices.hpp"
+#include "ScheduleFetcher.hpp"
 
 class Config {
     public:
-		Schedule schedule;
+        Schedule schedule;
+        // not sure about this placement but oh well
+        HTTPScheduleFetcher * fetcher;
         ConfigDevices devices;
 };
 

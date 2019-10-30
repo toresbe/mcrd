@@ -2,9 +2,11 @@
 #ifndef __SCHEDULEFETCHER_HPP
 #define __SCHEDULEFETCHER_HPP
 class HTTPScheduleFetcher;
-#include "Schedule.hpp"
+#include "ScheduleEntry.hpp"
 #include "HTTPGetter.hpp"
 #include <queue>
+// TODO: Get Config out of this
+#include "Config.hpp"
 
 class HTTPScheduleFetcher {
 private:
@@ -12,9 +14,10 @@ private:
 	std::chrono::system_clock::time_point last_refreshed;
 	std::chrono::system_clock::time_point expiry;
 	HTTPGetter getter;
+        std::shared_ptr<Config> config;
 
 public:
 	std::queue<ScheduleEntry> fetch();
-	HTTPScheduleFetcher(std::string uri);
+	HTTPScheduleFetcher(std::shared_ptr<Config> config, std::string uri);
 };
 #endif

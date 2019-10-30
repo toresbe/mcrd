@@ -39,12 +39,8 @@ std::shared_ptr<Config> ConfigReaderJSON::load(const std::string &filespec) {
 
     json cfg = json::parse(ifs);	
 
-    // TODO: Refactor this mess so the HTTP stuff is decoupled
-    // from the damn schedule class wtf man
     auto schedule_uri = cfg["schedule_uri"].get<std::string>();
-    auto fetcher = new HTTPScheduleFetcher(schedule_uri);
-    config->schedule.set_fetcher(fetcher);
-    config->schedule.refresh();
+    config->fetcher = new HTTPScheduleFetcher(config, schedule_uri);
 
     for(auto devicespec: cfg["devices"]) {
         auto type = devicespec["type"];

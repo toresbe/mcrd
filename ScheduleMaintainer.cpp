@@ -29,7 +29,8 @@ void ScheduleMaintainer::event_loop() {
         std::unique_lock<std::mutex> lock(thread_running_lock);
         BOOST_LOG_TRIVIAL(info) << "Next schedule fetch is at ";// << schedule->get_expiry();
         thread_running.wait_until(lock, config->schedule.get_expiry(), [this](){return !this->is_running;});
-        //schedule->refresh();
+        auto new_data = config->fetcher->fetch();
+        config->schedule.refresh(new_data);
     }
     BOOST_LOG_TRIVIAL(info) << "Ending ScheduleMaintainer event loop";
 }

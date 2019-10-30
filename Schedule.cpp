@@ -29,56 +29,7 @@ ScheduleEntry Schedule::pop() {
     return next_command;
 }
 
-void Schedule::set_fetcher(HTTPScheduleFetcher* fetcher) {
-    this->fetcher = fetcher;
-    BOOST_LOG_TRIVIAL(info) << "Assigning HTTP fetcher";
-}
-
-void Schedule::refresh() {
-    auto foo = this->fetcher->fetch();
-    update_back_buffer(foo);
-}
-
-   ////////////////////
-  /// ScheduleEntry //
- ////////////////////
-
-ScheduleEntry::ScheduleEntry(std::string event_data) { 
-    std::stringstream ss(event_data);
-    //std::string substr;
-    //getline( ss, substr, ',' );
-    //when = // Magic date from substr
-    //getline( ss, substr, ',' );
-    //who = Config::Devices::get(...);
-    //when -= who->latency;
-}
-
-void ScheduleEntry::issue() {
-    who->do_the(what);
-}
-
-/// ScheduleEntryList
-
-
-std::forward_list<std::string> ScheduleEntryList::split_tokens(std::string incoming_schedule) {
-    std::forward_list<std::string> tokens;
-    std::stringstream ss(incoming_schedule);
-    std::string token;
-    while (std::getline(ss, token, '\x0C')) {
-        tokens.push_front(token);
-    }
-    return tokens;
-}
-std::forward_list<ScheduleEntry> ScheduleEntryList::Parse(std::string received_data) {
-    std::forward_list<ScheduleEntry> new_commands;
-    BOOST_LOG_TRIVIAL(error) << "Asked to parse \"" << received_data << "\"with dummy function";
-    //TODO: Replace the nonsense below with JSON encoding
-    //for(auto command_string_list: split_tokens(received_data)) {
-    //    for(auto command_string: command_string_list) {
-    //        for(auto command_str: ScheduleItemSplitter::split(chunk)) {
-    //            new_commands.emplace_front(command_str);
-    //        }
-    //    }
-    //}
-    return new_commands;
+// Todo: replace even this function
+void Schedule::refresh(std::queue<ScheduleEntry> & new_queue) {
+    update_back_buffer(new_queue);
 }
