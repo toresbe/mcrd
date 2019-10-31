@@ -10,7 +10,10 @@ void Schedule::update_back_buffer(std::deque<ScheduleEntry> new_queue) {
     auto back_queue = (queue == &queue_buffer1) ? &queue_buffer1 : &queue_buffer2;
     auto first_relevant_cmd = new_queue.begin();
     // skip past elements
-    while(first_relevant_cmd->when <= std::chrono::system_clock::now()) first_relevant_cmd++;
+    while(first_relevant_cmd->when <= std::chrono::system_clock::now()) {
+        assert(first_relevant_cmd != new_queue.end());
+        first_relevant_cmd++;
+    }
     back_queue->assign(first_relevant_cmd, new_queue.end());
 }
 
@@ -23,6 +26,7 @@ void Schedule::flip_buffers() {
 //TODO: This needs to handle an empty queue more gracefully
 ScheduleEntry Schedule::pop() {
     std::lock_guard<std::mutex> lock(buffer_flip_mutex);
+    assert(queue->size());
     auto next_command = queue->front(); 
     queue->pop_front();
     return next_command;

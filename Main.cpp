@@ -44,14 +44,14 @@ int main(int argc, char * argv[]) {
     auto filespec = vm["config"].as<std::string>();
 
     std::shared_ptr<Config> cfg;
-    try {
+ //   try {
         cfg = ConfigReaderJSON::load(filespec);
-    }
-    catch (std::exception & e) {
-        BOOST_LOG_TRIVIAL(error) << "Failed to load configuration file \"" << filespec << "\"";
-        BOOST_LOG_TRIVIAL(error) << e.what();
-        exit(1);
-    }
+ //   }
+ //   catch (std::exception & e) {
+ //       BOOST_LOG_TRIVIAL(error) << "Failed to load configuration file \"" << filespec << "\"";
+ //       BOOST_LOG_TRIVIAL(error) << e.what();
+ //       exit(1);
+ //   }
 
     ScheduleMaintainer schedule_maintainer(cfg);
     Dispatcher dispatcher(cfg);

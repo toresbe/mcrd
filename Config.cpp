@@ -1,5 +1,7 @@
 #include "Config.hpp"
 #include "ControllableDevice.hpp"
+#include "ATEMDevice.hpp"
+#include "AMCPDevice.hpp"
 #include <map>
 #include <memory>
 #include <fstream>
@@ -25,15 +27,18 @@ std::shared_ptr<Config> ConfigReaderJSON::load(const std::string &filespec) {
     config->fetcher = new HTTPScheduleFetcher(config, schedule_uri);
 
     for(auto devicespec: cfg["devices"]) {
-        auto type = devicespec["type"];
-        if (devicespec["type"].get<std::string>() == "AMCP") {
-            auto device = std::make_shared<AMCPDevice>(devicespec["hostname"], devicespec["port"]);
+        auto device_type = devicespec["type"].get<std::string>();
+        std::string hostname = devicespec["hostname"];
+        unsigned int port = devicespec["port"];
+
+        if (device_type == "AMCP") {
+            auto device = std::make_shared<AMCPDevice>(hostname, port);
             config->devices.mount(devicespec["device_id"], device);
-        } else if (devicespec["type"].get<std::string>() == "Dummy") {
-            auto device = std::make_shared<ATEMDevice>(devicespec["hostname"], devicespec["port"]);
+        } else if (device_type == "Dummy") {
+            auto device = std::make_shared<ATEMDevice>(hostname, port);
             config->devices.mount(devicespec["device_id"], device);
-        } else if (devicespec["type"].get<std::string>() == "ATEM") {
-            auto device = std::make_shared<ATEMDevice>(devicespec["hostname"], devicespec["port"]);
+        } else if (device_type == "ATEM") {
+            auto device = std::make_shared<ATEMDevice>(hostname, port);
             config->devices.mount(devicespec["device_id"], device);
         } else {
             BOOST_LOG_TRIVIAL(error) << "Device must be ATEM, Dummy or AMCP!";
