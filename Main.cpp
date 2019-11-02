@@ -19,6 +19,10 @@ enum severity_level
     error
 };
 
+void apply_local_overrides(std::shared_ptr<Config> cfg, const boost::program_options::variables_map & args) {
+    if(args.count("cold_start")) cfg->cold_start = args["cold_start"].as<bool>();
+}
+
 int main(int argc, char * argv[]) {
     BOOST_LOG_FUNCTION();    
     boost::log::add_common_attributes();
@@ -32,7 +36,11 @@ int main(int argc, char * argv[]) {
          "config", 
          po::value<std::string>()->default_value("/etc/mcrd.cfg"), 
          "configuration file"
-        );
+        )(
+            "cold_start",
+            po::bool_switch(),
+            "reset and make a best effort to reinitialize (eg. seek media files) playout devices"
+         );
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
@@ -43,15 +51,9 @@ int main(int argc, char * argv[]) {
 
     auto filespec = vm["config"].as<std::string>();
 
-    std::shared_ptr<Config> cfg;
- //   try {
-        cfg = ConfigReaderJSON::load(filespec);
- //   }
- //   catch (std::exception & e) {
- //       BOOST_LOG_TRIVIAL(error) << "Failed to load configuration file \"" << filespec << "\"";
- //       BOOST_LOG_TRIVIAL(error) << e.what();
- //       exit(1);
- //   }
+    std::shared_ptr<Config> cfg = ConfigReaderJSON::load(filespec);
+    apply_local_overrides(cfg, vm);
+
 
     ScheduleMaintainer schedule_maintainer(cfg);
     Dispatcher dispatcher(cfg);

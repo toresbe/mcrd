@@ -13,6 +13,7 @@ class Config;
 class Config {
     public:
         Schedule schedule;
+        bool cold_start;
         // not sure about this placement but oh well
         HTTPScheduleFetcher * fetcher;
         ConfigDevices devices;

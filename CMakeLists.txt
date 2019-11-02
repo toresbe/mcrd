@@ -10,6 +10,9 @@ else()
   add_subdirectory(nlohmann)
 endif()
 
+# Date API
+add_subdirectory(date)
+
 # Boost & Curl
 
 if(WIN32)
@@ -29,6 +32,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(Threads REQUIRED)
 
+include_directories("date/include")
 FILE(GLOB SRCFILES *.cpp)
 ADD_EXECUTABLE(${PROGNAME} ${SRCFILES})
 

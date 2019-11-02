@@ -11,3 +11,10 @@ ScheduleEntry::ScheduleEntry(std::string what, std::shared_ptr<ControllableDevic
     this->who = who;
     this->when = when;
 }
+
+ScheduleEntry::ScheduleEntry(std::string what, std::shared_ptr<ControllableDevice> who, std::chrono::system_clock::time_point when, std::string huh) {
+    this->what = what;
+    this->who = who;
+    this->when = when;
+    this->huh = huh;
+}

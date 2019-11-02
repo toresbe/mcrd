@@ -16,7 +16,9 @@ class ScheduleEntry {
         std::string what;
         std::shared_ptr<ControllableDevice> who;
         std::chrono::system_clock::time_point when;
+        std::string huh; // a debug message may optionally specified in the JSON file
         ScheduleEntry(std::string what, std::shared_ptr<ControllableDevice> who, std::chrono::system_clock::time_point when);
+        ScheduleEntry(std::string what, std::shared_ptr<ControllableDevice> who, std::chrono::system_clock::time_point when, std::string huh);
         void issue();
 };
 

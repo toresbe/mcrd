@@ -1,5 +1,6 @@
 #include <chrono>
 #include <iomanip>
+#include "date/date.h"
 #include <sstream>
 #include <boost/log/trivial.hpp>
 
@@ -21,6 +22,7 @@ namespace DateString {
     }
 
     std::chrono::system_clock::time_point from_string(std::string datestr, const std::string &format) {
+
         std::tm tm = {};
         std::stringstream ss(datestr);
         ss >> std::get_time(&tm, format.c_str());
@@ -28,7 +30,23 @@ namespace DateString {
         return tp;
     }
 
-    std::chrono::system_clock::time_point from_iso(std::string datestr) {
-        return from_string(datestr, "%Y-%m-%dT%TZ");
-    }
+    date::sys_time<std::chrono::milliseconds> from_iso(std::string datestr) 
+        {
+            std::istringstream in{datestr};
+            date::sys_time<std::chrono::milliseconds> tp;
+            in >> date::parse("%FT%TZ", tp);
+            if (in.fail())
+            {
+                in.clear();
+                in.exceptions(std::ios::failbit);
+                in.str(datestr);
+                in >> date::parse("%FT%T%Ez", tp);
+            }
+            return tp;
+        }
+//    std::chrono::system_clock::time_point from_iso(std::string datestr) {
+//        auto time = date::parse("%Y-%m-%dT%TZ", datestr);
+//        std::cout<<"DATE: "<< time;
+//        return from_string(datestr, "%Y-%m-%dT%TZ");
+//    }
 }

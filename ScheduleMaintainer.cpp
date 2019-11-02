@@ -18,9 +18,9 @@ ScheduleMaintainer::~ScheduleMaintainer() {
     thread.join();
 }
 
-
 void ScheduleMaintainer::refresh() {
-    auto new_data = config->fetcher->fetch();
+    config->fetcher->refresh();
+    auto new_data = config->fetcher->get_schedule();
     config->schedule.refresh(new_data);
 }
 
