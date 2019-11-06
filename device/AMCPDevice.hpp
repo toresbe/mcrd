@@ -1,7 +1,7 @@
 #ifndef __AMCPDEVICE_HPP
 #define __AMCPDEVICE_HPP
 
-#include "ControllableDevice.hpp"
+#include "device/ControllableDevice.hpp"
 
 class AMCPDevice: public ControllableDevice {
     private:

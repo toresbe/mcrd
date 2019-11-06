@@ -2,13 +2,13 @@
 #ifndef __SCHEDULE_HPP
 #define __SCHEDULE_HPP
 
-#include "ScheduleEntry.hpp"
+#include "schedule/ScheduleEntry.hpp"
 #include <deque>
 #include <string>
 #include <mutex>
 #include <forward_list>
 #include <boost/log/trivial.hpp>
-#include "ControllableDevice.hpp"
+#include "device/ControllableDevice.hpp"
 
 // Synchronized data structure used by the Dispatcher and the ScheduleMaintainer
 class Schedule {

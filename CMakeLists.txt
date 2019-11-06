@@ -2,16 +2,14 @@ cmake_minimum_required(VERSION 3.10)
 
 project(mcrd)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-if(FOO_USE_EXTERNAL_JSON)
-  find_package(nlohmann_json 3.2.0 REQUIRED)
-else()
-  set(JSON_BuildTests OFF CACHE INTERNAL "")
-  set(JSON_Install OFF CACHE INTERNAL "")
-  add_subdirectory(nlohmann)
-endif()
+
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+set(JSON_Install OFF CACHE INTERNAL "")
+add_subdirectory(thirdparty/json)
 
 # Date API
-add_subdirectory(date)
+add_subdirectory(thirdparty/date)
+include_directories("thirdparty/date/include")
 
 # Boost & Curl
 
@@ -29,11 +27,16 @@ endif()
 set(PROGNAME mcrd)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Threads REQUIRED)
 
-include_directories("date/include")
-FILE(GLOB SRCFILES *.cpp)
+FILE(GLOB SRCFILES *.cpp
+    device/*.cpp
+    misc/*.cpp
+    schedule/*.cpp
+    workers/*.cpp)
+
 ADD_EXECUTABLE(${PROGNAME} ${SRCFILES})
 
 set_property (TARGET ${PROJECT_NAME}

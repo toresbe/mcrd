@@ -1,7 +1,7 @@
 #include "ScheduleFetcher.hpp"
-#include "ScheduleEntry.hpp"
-#include "HTTPGetter.hpp"
-#include "DateSerialization.hpp"
+#include "schedule/ScheduleEntry.hpp"
+#include "misc/HTTPGetter.hpp"
+#include "misc/DateSerialization.hpp"
 #include "nlohmann/json.hpp"
 #include <chrono>
 #include <string>

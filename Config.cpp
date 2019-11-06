@@ -1,7 +1,7 @@
 #include "Config.hpp"
-#include "ControllableDevice.hpp"
-#include "ATEMDevice.hpp"
-#include "AMCPDevice.hpp"
+#include "device/ControllableDevice.hpp"
+#include "device/ATEMDevice.hpp"
+#include "device/AMCPDevice.hpp"
 #include <map>
 #include <memory>
 #include <fstream>

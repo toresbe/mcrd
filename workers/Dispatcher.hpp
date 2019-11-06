@@ -1,5 +1,5 @@
 #pragma once
-#include "ScheduleEntry.hpp"
+#include "schedule/ScheduleEntry.hpp"
 #include "Config.hpp"
 
 #include <thread>

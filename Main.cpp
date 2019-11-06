@@ -3,8 +3,8 @@
 #include <chrono>
 #include <thread>
 #include "Config.hpp"
-#include "Dispatcher.hpp"
-#include "ScheduleMaintainer.hpp"
+#include "workers/Dispatcher.hpp"
+#include "schedule/ScheduleMaintainer.hpp"
 #include <boost/program_options.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes/named_scope.hpp>

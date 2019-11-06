@@ -7,7 +7,7 @@ class ScheduleEntry;
 #include <chrono>
 #include <memory>
 
-#include "ControllableDevice.hpp"
+#include "device/ControllableDevice.hpp"
 
 // Note to self: Schedule data format needs to be JSON, what was I smoking...
 // This code is trash

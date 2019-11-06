@@ -1,4 +1,4 @@
-#include "ControllableDevice.hpp"
+#include "device/ControllableDevice.hpp"
 #include <boost/log/trivial.hpp>
 
 DummyDevice::DummyDevice(std::string hostname, unsigned int port) {

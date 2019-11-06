@@ -1,4 +1,4 @@
-#include "ScheduleEntry.hpp"
+#include "schedule/ScheduleEntry.hpp"
 #include <string>
 #include <chrono>
 

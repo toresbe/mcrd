@@ -1,7 +1,7 @@
-[submodule "nlohmann"]
-	path = nlohmann
-	url = https://github.com/nlohmann/json.git
 [submodule "date"]
-	path = date
+	path = thirdparty/date
 	url = https://github.com/HowardHinnant/date.git
 	branch = e3186e36c289f235d8a2b07a5380c4620683ee54
+[submodule "thirdparty/json"]
+	path = thirdparty/json
+	url = https://github.com/nlohmann/json.git

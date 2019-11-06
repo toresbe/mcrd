@@ -1,5 +1,5 @@
-#include "ControllableDevice.hpp"
-#include "ATEMDevice.hpp"
+#include "device/ControllableDevice.hpp"
+#include "device/ATEMDevice.hpp"
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>

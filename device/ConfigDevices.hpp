@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include "ControllableDevice.hpp"
+#include "device/ControllableDevice.hpp"
 
 class ConfigDevices {
 private:

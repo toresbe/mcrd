@@ -2,8 +2,8 @@
 #ifndef __SCHEDULEFETCHER_HPP
 #define __SCHEDULEFETCHER_HPP
 class HTTPScheduleFetcher;
-#include "ScheduleEntry.hpp"
-#include "HTTPGetter.hpp"
+#include "schedule/ScheduleEntry.hpp"
+#include "misc/HTTPGetter.hpp"
 #include <thread>
 #include <deque>
 // TODO: Get Config out of this

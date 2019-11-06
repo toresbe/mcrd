@@ -6,9 +6,9 @@ class Config;
 #include <map>
 #include <memory>
 #include <string>
-#include "Schedule.hpp"
-#include "ConfigDevices.hpp"
-#include "ScheduleFetcher.hpp"
+#include "schedule/Schedule.hpp"
+#include "device/ConfigDevices.hpp"
+#include "schedule/ScheduleFetcher.hpp"
 
 class Config {
     public:

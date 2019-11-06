@@ -1,4 +1,4 @@
-#include "ControllableDevice.hpp"
+#include "device/ControllableDevice.hpp"
 #include <future>
 
 class ATEMDevice: public ControllableDevice {

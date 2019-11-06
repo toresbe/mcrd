@@ -3,8 +3,8 @@
 #include <string>
 #include <streambuf>
 #include <deque>
-#include "ControllableDevice.hpp"
-#include "AMCPDevice.hpp"
+#include "device/ControllableDevice.hpp"
+#include "device/AMCPDevice.hpp"
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 

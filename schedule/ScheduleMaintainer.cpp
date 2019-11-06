@@ -1,5 +1,5 @@
-#include "ScheduleMaintainer.hpp"
-#include "DateSerialization.hpp"
+#include "schedule/ScheduleMaintainer.hpp"
+#include "misc/DateSerialization.hpp"
 #include "Config.hpp"
 #include <chrono>
 
